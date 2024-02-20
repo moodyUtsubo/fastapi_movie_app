@@ -12,7 +12,7 @@ import auth.jwt
 # import data.schemas
 import data.models
 
-SQLALCHEMY_DATABASE_URL = "postgresql://thupnt:fxjLCG74@localhost/test"
+SQLALCHEMY_DATABASE_URL = "postgresql://username:password@localhost/database"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
