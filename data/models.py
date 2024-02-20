@@ -1,19 +1,22 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
 
 from .database import Base
 
 from enum import Enum
 
 
-# class User(Base):
-#     __tablename__ = "users"
+class User(Base):
+    __tablename__ = "watchers"
 
-#     id = Column(Integer, primary_key=True)
-#     username = Column(String, unique=True, index=True)
-#     hashed_password = Column(String)
-#     is_active = Column(Boolean, default=True)
+    id = Column(Integer, primary_key=True)
+    full_name = Column(String)
+    email = Column(String, unique=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    disabled = Column(Boolean, default=False)
+    role = Column(String, default='user')
 
 
 class Movie(Base):
@@ -39,3 +42,8 @@ class Genre(str, Enum):
     romance = "Romance"
     western = "Western"
     thriller = "Thriller"
+
+
+class Role(str, Enum):
+    user = "user"
+    admin = "admin"

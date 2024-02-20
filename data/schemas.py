@@ -2,7 +2,7 @@ from typing import List, Union
 
 from pydantic import BaseModel
 
-from .models import Type, Genre
+from .models import Type, Genre, Role
 
 
 class MovieBase(BaseModel):
@@ -23,18 +23,22 @@ class Movie(MovieBase):
         orm_mode = True
 
 
-# class UserBase(BaseModel):
-#     email: str
+class UserBase(BaseModel):
+    full_name: str
+    email: str
+    username: str
+    role: Role
+    
 
 
-# class UserCreate(UserBase):
-#     password: str
+class UserCreate(UserBase):
+    hashed_password: str
 
 
-# class User(UserBase):
-#     id: int
-#     is_active: bool
-#     items: List[Item] = []
+class User(UserBase):
+    id: int
+    disabled: bool
+    # items: List[Item] = []
 
-#     class Config:
-#         orm_mode = True
+    class Config:
+        orm_mode = True
