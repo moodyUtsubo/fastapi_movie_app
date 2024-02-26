@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 # to get a string like this run:
 # openssl rand -hex 32
+# Secret key phải đưa vào env chứ ko đặt trong code thế này, lỗi bảo mật nghiêm trọng
 SECRET_KEY = "100f98adbcdecdd265c2cdb78e94737208448948ae73dcb66b35e0cb7b813a9f"
 ALGORITHM = "HS256"
 
@@ -24,6 +25,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
+#Get db thì phải đưa vào bên trong 1 file database.py riêng chứ sao lại nhét chung vào đây?
 def get_db():
     db = SessionLocal()
     try:

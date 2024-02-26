@@ -14,11 +14,12 @@ import data.models
 
 SQLALCHEMY_DATABASE_URL = "postgresql://username:password@localhost/database"
 
+#Tách đoạn này thành 1 file setup test, đặt lại tên file test theo từng module chứ ko đặt chung hết thành 1 file như
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 data.models.Base.metadata.create_all(bind=engine)
-
+này
 def override_get_db():
     try:
         db = TestingSessionLocal()
@@ -34,6 +35,7 @@ access_token_expires = timedelta(minutes=30)
 client = TestClient(main.app)
 
 
+# Tên function khi viết test cần viết đầy đủ nghĩa, ví dụ test_signup_success
 def test_signup():
     response = client.post("/signup/", params={"full_name": "Mary Jane", "email": "maryjane@example.com", "username": "maryjane", "password": "13579"})
     assert response.status_code == 200, response.text
@@ -43,6 +45,7 @@ def test_signup():
     assert db["role"] == "user"
 
 
+# test_signup_return_400_existed_email
 def test_existed_email():
     response = client.post("/signup/", params={"full_name": "Mary Jane", "email": "maryjane@example.com", "username": "maryjane", "password": "13579"})
     assert response.status_code == 400
@@ -55,6 +58,7 @@ def test_existed_username():
     assert response.json() == {"detail":"Username already existed"}
 
 
+#Tach movie va user thanh 2 file test rieng
 def test_create_movies():
     response = client.post("/api/v1/movies/", headers={
         "Authorization": f'Bearer {auth.jwt.create_access_token(data={"sub": "johndoe"}, expires_delta=access_token_expires)}'
