@@ -8,14 +8,19 @@ from passlib.context import CryptContext
 from typing_extensions import Annotated
 
 from .token import TokenData
-from data import models, schemas
-from data.database import SessionLocal
+from data.models import user_models
+from data.schemas import user_schemas
+from postgres_session.database import get_db
 from sqlalchemy.orm import Session
 
+from dotenv import load_dotenv
+import os
 
-# to get a string like this run:
+load_dotenv()
+
+
 # openssl rand -hex 32
-SECRET_KEY = "100f98adbcdecdd265c2cdb78e94737208448948ae73dcb66b35e0cb7b813a9f"
+SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256"
 
 
@@ -23,13 +28,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 def verify_password(plain_password, hashed_password):
@@ -41,7 +39,7 @@ def get_password_hash(password):
 
 
 def get_user(db: Session, username: str):
-    return db.query(models.User).filter(models.User.username == username).first()
+    return db.query(user_models.User).filter(user_models.User.username == username).first()
 
 
 def authenticate_user(db, username: str, password: str):
@@ -85,7 +83,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db: Se
 
 
 async def get_current_active_user(
-    current_user: Annotated[schemas.User, Depends(get_current_user)]
+    current_user: Annotated[user_schemas.User, Depends(get_current_user)]
 ):
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -93,7 +91,7 @@ async def get_current_active_user(
 
 
 async def get_current_active_admin(
-    current_admin: Annotated[schemas.User, Depends(get_current_active_user)]
+    current_admin: Annotated[user_schemas.User, Depends(get_current_active_user)]
 ):
     if current_admin.role != "admin":
         raise HTTPException(status_code=400, detail="Inactive admin")
