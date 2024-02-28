@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from .models import Type, Genre, Role
 
 
+#Tách ra thành module shemas chứa nhiều file, chứ sau có mấy chục model e viết hết vào đây à?
 class MovieBase(BaseModel):
     name: str
     type: Type

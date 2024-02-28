@@ -6,7 +6,7 @@ from .database import Base
 
 from enum import Enum
 
-
+#Tách ra thành module models chứa nhiều file, chứ sau có mấy chục model e viết hết vào đây à?
 class User(Base):
     __tablename__ = "watchers"
 

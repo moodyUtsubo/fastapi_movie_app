@@ -33,6 +33,7 @@ def user_role(db: Session, id: int, role: str):
     db.commit()
 
 
+#Tách movie và user thành 2 module rieeng chứ sao lại nhét chung như này?
 def get_movies(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Movie).offset(skip).limit(limit).all()
 
